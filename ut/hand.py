@@ -125,6 +125,7 @@ class Board:
 
         self.id = data['Filename'] + ' ' + data['Board']
         self.data = data
+        self.vul = hvVul[self.data['Vulnerable']]
         self.board = data['Board']
         self.players = [data['South'],data['West'],data['North'],data['East']]
         self.auction = Auction(data['Auction'],data['Dealer'])
@@ -139,11 +140,16 @@ class Board:
             suits = hands_str[hand_index].split('.')
             seat = WNESWNES[self.auction.dealer_index:].index(wnes) + 1
             player = self.players[WNES.index(wnes)]
-            hands.append(Hand(suits,wnes,seat,player))
+            if self.vul == '-':
+                colors = 'w/w'
+            elif self.vul == 'b':
+                colors = 'r/r'
+            elif self.vul == 'n' and wnes in ['N','S']:
+                colors = 'r/w'
+            else:
+                colors = 'w/r'
+            hands.append(Hand(suits,wnes,seat,player,colors))
         return hands
-
-    def get_vul(self,seat):
-        pass
 
     def encode_deal(self):
         ed = ''
@@ -248,15 +254,15 @@ class Board:
         for card in play:
             hvpc = hvpc + 'pc|{}|'.format(card)
         hvmc='mc|11|'
-        hvstr=hvurl+hvpn+hvst+hvmd+hvrh+hvsv+hvmb+hvpc
-        print(hvstr)
+        return (hvurl+hvpn+hvst+hvmd+hvrh+hvsv+hvmb+hvpc)
 
 class Hand:
-    def __init__(self, suits, wnes, seat, player):
+    def __init__(self, suits, wnes, seat, player, colors):
         self.suits = suits
         self.wnes = wnes
         self.seat = seat
         self.player = player
+        self.colors = colors
 
     def cardsHV(self):
         #cards in HV format

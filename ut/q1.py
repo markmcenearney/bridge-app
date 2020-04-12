@@ -63,6 +63,7 @@ def get_deals(dir):
                     play = []
                 elif line.startswith("[Vulnerable"):
                     data['Vulnerable'] = line[line.find('"')+1 : line.rfind('"')]
+                    print('line: ',line)
                 elif line.startswith("["):
                         pass
                 elif line.startswith("*"):
@@ -91,6 +92,7 @@ def get_deals(dir):
 
                     print('d.opener().seat: ',d.opener().seat)
                     print('d.opener().wnes: ',d.opener().wnes)
+                    print('d.opener().colors()',d.opener().colors)
                     print('d.opener().player: ',d.opener().player)
                     print('d.opener().cards17(): ',d.opener().cards17())
                     print('len(d.opener().spades()): ',len(d.opener().spades()))
